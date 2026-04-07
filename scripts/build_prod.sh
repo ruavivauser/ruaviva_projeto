@@ -87,6 +87,23 @@ EOF
 
     echo "📄 CHANGELOG.md atualizado com as informações da versão $APP_VERSION e Hash SHA-256."
 
+    # Copiar APK para a pasta versoes e atualizar versoes.md
+    echo "📁 Salvo APK na pasta versoes..."
+    mkdir -p versoes
+    cp "$APK_PATH" "versoes/app-release-$APP_VERSION.apk"
+    
+    VERSOES_FILE="versoes.md"
+    if [ ! -f "$VERSOES_FILE" ]; then
+        echo "# Versões do Aplicativo Rua Viva" > "$VERSOES_FILE"
+        echo "" >> "$VERSOES_FILE"
+        echo "Aqui você encontra os arquivos APK disponíveis para instalação direta no Android." >> "$VERSOES_FILE"
+        echo "" >> "$VERSOES_FILE"
+        echo "### Histórico de Downloads" >> "$VERSOES_FILE"
+    fi
+    # Anexa a versão na lista
+    echo "- [⬇️ Baixar Rua Viva (Versão $APP_VERSION)](./versoes/app-release-$APP_VERSION.apk) - Data: $DATE" >> "$VERSOES_FILE"
+    echo "📄 Arquivo $VERSOES_FILE atualizado com o link!"
+
     # Criar tag automatizada no git
     echo "🏷️ Criando git tag local: v$APP_VERSION..."
     TAG_OUTPUT=$(git tag -a "v$APP_VERSION" -m "Release v$APP_VERSION: $CHANGELOG_NOTES" 2>&1)
